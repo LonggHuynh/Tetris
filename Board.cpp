@@ -87,8 +87,10 @@ bool Board::checkBlockFieldColision() {
 }
 
 void Board::generateNewBlock() {
-	delete block;
-	block = new Block(Point(boardOffset.getX() + WIDTH / 2, -4));
+	if (block)
+		delete block;
+
+	block = new Block(Point(boardOffset.getX() + WIDTH / 2, 0));
 }
 
 void Board::step(bool drop) {
@@ -102,6 +104,7 @@ void Board::step(bool drop) {
 		generateNewBlock();
 	}
 	else if (drop) {
+		Sleep(DROP_SPEED);
 		this->step(drop);
 	}
 }

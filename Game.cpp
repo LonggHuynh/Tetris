@@ -60,7 +60,7 @@ void Game::run()
 			dropRight = false;
 		}
 		stepsCounter = (++stepsCounter) % 20;
-		Sleep(50);
+		Sleep(GAME_SPEED);
 	} while (key != ESC);
 
 	setTextColor(Color::WHITE);
