@@ -15,6 +15,7 @@ void Game::run()
 		if (_kbhit())
 		{
 			key = _getch();
+			//left player commands
 			if (key == 'W' || key == 'w') {
 				boards[0].rotateCounterClockwise();
 			}
@@ -27,10 +28,26 @@ void Game::run()
 			else if (key == 'A' || key == 'a') {
 				boards[0].moveLeft();
 			}
+			//right player commands
+			else if (key == 'I' || key == 'i') {
+				boards[1].rotateCounterClockwise();
+			}
+			else if (key == 'K' || key == 'k') {
+				boards[1].rotateClockwise();
+			}
+			else if (key == 'L' || key == 'l') {
+				boards[1].moveRight();
+			}
+			else if (key == 'J' || key == 'j') {
+				boards[1].moveLeft();
+			}
+
 		}
 
-		if(!stepsCounter)
+		if (!stepsCounter) {
 			boards[0].step();
+			boards[1].step();
+		}
 		stepsCounter = (++stepsCounter) % 20;
 		Sleep(50);
 	} while (key != ESC);

@@ -1,5 +1,6 @@
 #include "io_utils.h"
 #include "Color.h"
+#include "time.h"
 
 using namespace std;
 
