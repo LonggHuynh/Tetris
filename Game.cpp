@@ -11,6 +11,9 @@ void Game::run()
 {
 	char key = 0;
 	int stepsCounter = 0;
+	bool dropRight = false;
+	bool dropLeft = false;
+
 	do {
 		if (_kbhit())
 		{
@@ -28,6 +31,9 @@ void Game::run()
 			else if (key == 'A' || key == 'a') {
 				boards[0].moveLeft();
 			}
+			else if (key == 'X' || key == 'x') {
+				dropLeft = true;
+			}
 			//right player commands
 			else if (key == 'I' || key == 'i') {
 				boards[1].rotateCounterClockwise();
@@ -41,12 +47,17 @@ void Game::run()
 			else if (key == 'J' || key == 'j') {
 				boards[1].moveLeft();
 			}
+			else if (key == 'M' || key == 'm') {
+				dropRight = true;
+			}
 
 		}
 
 		if (!stepsCounter) {
-			boards[0].step();
-			boards[1].step();
+			boards[0].step(dropLeft);
+			boards[1].step(dropRight);
+			dropLeft = false;
+			dropRight = false;
 		}
 		stepsCounter = (++stepsCounter) % 20;
 		Sleep(50);

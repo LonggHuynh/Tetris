@@ -50,7 +50,7 @@ public:
 	void rotateClockwise();
 	void moveRight();
 	void moveLeft();
-	void step();
+	void step(bool drop);
 	bool isOutOfBounds();
 	bool isOutOfMaxX();
 	bool isOutOfMinX();

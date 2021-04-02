@@ -91,7 +91,7 @@ void Board::generateNewBlock() {
 	block = new Block(Point(boardOffset.getX() + WIDTH / 2, -4));
 }
 
-void Board::step() {
+void Board::step(bool drop) {
 	block->clearDraw();
 	block->move(0, 1);
 	block->draw();
@@ -100,5 +100,8 @@ void Board::step() {
 	if (isColiding) {
 		layBlockInField();
 		generateNewBlock();
+	}
+	else if (drop) {
+		this->step(drop);
 	}
 }
