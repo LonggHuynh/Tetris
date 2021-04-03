@@ -34,8 +34,13 @@ class Board
 	};
 	Point boardOffset;	
 	Block* block = nullptr;
+	bool hasLost = false;
 	bool checkBlockFieldColision();
+	bool checkIfLost();
 	void layBlockInField();
+	void clearRow(int y);
+	void shrinkEmptyRow(int y);
+	void checkForCompletedRows(int bottom, int top);
 	void generateNewBlock();
 public:
 	Board() : Board(0,0) {}
@@ -43,6 +48,7 @@ public:
 		boardOffset = Point(offsetX, offsetY);	
 		generateNewBlock();
 	}
+	bool isLost();
 	void draw();
 	void rotateCounterClockwise();
 	void rotateClockwise();

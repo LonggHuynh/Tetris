@@ -61,10 +61,18 @@ void Game::run()
 		}
 		stepsCounter = (++stepsCounter) % 20;
 		Sleep(GAME_SPEED);
-	} while (key != ESC);
+	} while (key != ESC && !boards[0].isLost() && !boards[1].isLost());
 
 	setTextColor(Color::WHITE);
 	clear_screen();
+
+	if (!boards[0].isLost() && boards[1].isLost()) {
+		cout << "LeftPlayerWins" << endl;
+	}
+
+	if (boards[0].isLost() && !boards[1].isLost()) {
+		cout << "RightPlayerWins" << endl;
+	}
 }
 
 void Game::drawBorders()
