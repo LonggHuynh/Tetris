@@ -21,7 +21,7 @@ void Board::clearRow(int y) {
 	for (int x = 5; x < WIDTH; x++) {
 		Point(boardOffset.getX() + x, boardOffset.getY() + y).draw(' ');
 		Point(boardOffset.getX() + WIDTH -1 - x, boardOffset.getY() + y).draw(' ');
-		Sleep(10);
+		Sleep(CLEAR_ROW_DELAY);
 	}	
 }
 
@@ -43,58 +43,57 @@ void Board::shrinkEmptyRow(int rowDeleted) {
 	fill(field[0].begin(), field[0].end(), 0);
 }
 
-void Board::rotateCounterClockwise() {	
+void Board::rotateBlock(int quarters) {
 	block->clearDraw();
-	block->rotateQuarterly(-1);	
-	
-	if (isOutOfBounds())
-		block->rotateQuarterly(1);
+	block->rotateQuarterly(quarters);
+
+	if (isOutOfBounds() || checkBlockFieldColision())
+		block->rotateQuarterly(-quarters);
 
 	block->draw();
+}
+
+void Board::moveBlock(int x, int y) {	
+	block->clearDraw();
+	block->move(x, y);
+
+	if (isOutOfMinX() || isOutOfMaxX() || checkBlockFieldColision())
+		block->move(-x, -y);
+
+	block->draw();
+}
+
+void Board::rotateCounterClockwise() {	
+	rotateBlock(-1);
 }
 
 void Board::rotateClockwise() {	
-	block->clearDraw();
-	block->rotateQuarterly(1);
-	
-	if (isOutOfBounds())
-		block->rotateQuarterly(-1);
-
-	block->draw();
+	rotateBlock(1);
 }
 
 void Board::moveRight() {	
-	if (isOutOfMaxX())
-		return;
-	block->clearDraw();
-	block->move(1, 0);
-	block->draw();
+	moveBlock(1, 0);
 }
 
 void Board::moveLeft() {
-	if (isOutOfMinX())
-		return;
-
-	block->clearDraw();
-	block->move(-1, 0);
-	block->draw();
+	moveBlock(-1, 0);
 }
 
 bool Board::isOutOfBounds() {
-	return isOutOfMinX() || isOutOfMaxX();
+	return isOutOfMinX() || isOutOfMaxX() || 
+		block->getBlockMaxY() >= boardOffset.getY() + HEIGHT;
 }
 
 bool Board::isOutOfMinX() {
 	int minX = block->getBlockMinX();
 
-	return minX <= boardOffset.getX();		
+	return minX < boardOffset.getX();		
 }
 
 bool Board::isOutOfMaxX() {
 	int maxX = block->getBlockMaxX();
 
-	return maxX >= boardOffset.getX() + WIDTH - 1;
-		
+	return maxX > boardOffset.getX() + WIDTH -1;		
 }
 
 void Board::layBlockInField() {

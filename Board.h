@@ -10,7 +10,12 @@ using std::endl;
 
 class Board
 {
-	enum { WIDTH = 12, HEIGHT = 18, DROP_SPEED = 5};
+	enum { 
+		WIDTH = 12, 
+		HEIGHT = 18, 
+		DROP_SPEED = 5, 
+		CLEAR_ROW_DELAY = 10
+	};
 	vector<vector<int>> field = {
 		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -39,6 +44,8 @@ class Board
 	bool checkIfLost();
 	void layBlockInField();
 	void clearRow(int y);
+	void rotateBlock(int quarters);
+	void moveBlock(int x, int y);
 	void shrinkEmptyRow(int y);
 	void checkForCompletedRows(int bottom, int top);
 	void generateNewBlock();
@@ -58,7 +65,6 @@ public:
 	bool isOutOfBounds();
 	bool isOutOfMaxX();
 	bool isOutOfMinX();
-	//void dropBlock();	
 };
 
 #endif

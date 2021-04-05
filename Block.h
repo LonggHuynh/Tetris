@@ -57,15 +57,8 @@ class Block {
             { 0, 0, 1, 0 }
         }
     };
-    /*vector<vector<int>> shape =
-    {
-        { 0, 0, 0, 0 },
-        { 0, 0, 0, 0 },
-        { 0, 0, 0, 0 },
-        { 0, 0, 0, 0 }
-    };  */  
     Point points[4];
-    Point &center = points[2];
+    Point center;
     void drawShape(char ch);
     void pickPrimaryBlockRotation();
     void pickBlockType(Point offset);
