@@ -10,7 +10,7 @@ using std::endl;
 
 class Board
 {
-	enum { WIDTH = 12, HEIGHT = 18 };
+	enum { WIDTH = 12, HEIGHT = 18, DROP_SPEED = 5};
 	vector<vector<int>> field = {
 		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -33,18 +33,22 @@ class Board
 		{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }
 	};
 	Point boardOffset;	
-	Block* block;
+	Block* block = nullptr;
+	bool hasLost = false;
 	bool checkBlockFieldColision();
+	bool checkIfLost();
 	void layBlockInField();
+	void clearRow(int y);
+	void shrinkEmptyRow(int y);
+	void checkForCompletedRows(int bottom, int top);
 	void generateNewBlock();
 public:
-	Board() {		
-		block = new Block();
-	}
+	Board() : Board(0,0) {}
 	Board(int offsetX, int offsetY) {
 		boardOffset = Point(offsetX, offsetY);	
-		block = new Block(boardOffset);
+		generateNewBlock();
 	}
+	bool isLost();
 	void draw();
 	void rotateCounterClockwise();
 	void rotateClockwise();

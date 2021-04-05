@@ -4,6 +4,7 @@
 #include "io_utils.h"
 #include "Point.h"
 #include <vector>
+#include <cmath>
 
 using std::vector;
 using std::cout;
@@ -64,31 +65,18 @@ class Block {
         { 0, 0, 0, 0 }
     };  */  
     Point points[4];
-    Point& center = points[1];
+    Point &center = points[2];
     void drawShape(char ch);
-
+    void pickPrimaryBlockRotation();
+    void pickBlockType(Point offset);
+    void setMaxYtoOffset(int y);
 public:
     Block() : Block(Point()) {}
 	Block(Point offset) {
-        int blockType = getRandom(0,6);
-        int rotation = getRandom(-3, 3);        
-
-        for (size_t i = 0, p = 0; i < 4; i++)
-        {
-            for (size_t j = 0; j < 4; j++)
-            {
-                /*shape[i][j] = 0;
-                shape[i][j] = block_list[blockType][i][j];*/
-                if (block_list[blockType][i][j] == 1) {
-                    points[p++].setPosition(
-                        offset.getX() + i, 
-                        offset.getY() + j
-                    );
-                }
-            }
-        }
-
-        //rotateQuarterly(true);
+        pickBlockType(offset);
+        pickPrimaryBlockRotation();
+        setMaxYtoOffset(offset.getY());
+        draw();
 	}
 	void draw();
     void clearDraw();
@@ -97,6 +85,8 @@ public:
     const Point getPoint(int i);
     int getBlockMaxX();
     int getBlockMinX();
+    int getBlockMaxY();
+    int getBlockMinY();
 };
 
 #endif
