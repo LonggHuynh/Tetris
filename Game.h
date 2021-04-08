@@ -8,7 +8,7 @@ using std::cout;
 using std::endl;
 
 class Game {
-	enum { ESC = 27, GAME_SPEED = 20};
+	enum { ESC = 27, GAME_SPEED = 40};
 	Board boards[2] = { {1,0}, {14,0} };
 public:	
 	void init();
