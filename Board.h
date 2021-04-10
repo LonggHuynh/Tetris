@@ -45,7 +45,7 @@ class Board
 	void layBlockInField();
 	void clearRow(int y);
 	void rotateBlock(int quarters);
-	void moveBlock(int x, int y);
+	bool tryMoveBlock(int x, int y, bool shouldDraw = true);	
 	void shrinkEmptyRow(int y);
 	void checkForCompletedRows(int bottom, int top);
 	void generateNewBlock();
@@ -63,8 +63,9 @@ public:
 	void moveLeft();
 	void step(bool drop);
 	bool isOutOfBounds();
-	bool isOutOfMaxX();
-	bool isOutOfMinX();
+	int getRightBorderDeviation();
+	int getLeftBorderDeviation();
+	bool isOutOfMaxY();
 };
 
 #endif
