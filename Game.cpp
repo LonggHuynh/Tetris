@@ -2,6 +2,7 @@
 
 void Game::init()
 {
+	this->isRunning = true;
 	system("cls");
 	drawBorders();
 	boards[0].draw();
@@ -10,10 +11,16 @@ void Game::init()
 
 void Game::menu()
 {
-	cout << "WELCOME !" << endl;
+	system("cls");
+	if (this->isRunning){ cout << "The game paused" << endl; }
+	else { cout << "WELCOME !" << endl; }
+
 	cout << "enter your choice and press return :" << endl;
 	cout << "(1) Start a new game" << endl;
-	//	(2) Continue a paused game
+	if (this->isRunning)
+	{
+		cout << "(2) Continue a paused game" << endl;
+	}
 	cout <<	"(8) Present instructions and keys" << endl;
 	cout <<	"(9) EXIT" << endl;
 		
@@ -24,11 +31,19 @@ void Game::menu()
 	switch (userInput)
 	{
 	case 1: //start the game
+		this->boards[0] = { 1,0 };
+		this->boards[1] = { 14,0 };
 		this->init();
 		this->run();
 		break;
+	case 2:
+		if (this->isRunning){
+			this->init();
+			this->run();
+		}
+		break;
 	case 8: 
-		cout << "888"; 
+		cout << "Instructions :"; 
 		break;
 	case 9: 
 		cout << "GOOD BYE !";
@@ -52,7 +67,12 @@ void Game::run()
 		{
 			key = _getch();
 			//left player commands
-			if (key == 'W' || key == 'w') {
+			if (key == 27)
+			{
+				this->menu();
+				return;
+			}
+			else if (key == 'W' || key == 'w') {
 				boards[0].rotateCounterClockwise();
 			}
 			else if (key == 'S' || key == 's') {
