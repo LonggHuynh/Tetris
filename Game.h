@@ -14,6 +14,7 @@ public:
 	void init();
 	void run();
 	void drawBorders();
+	void menu();
 };
 
 #endif

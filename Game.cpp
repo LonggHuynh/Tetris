@@ -2,9 +2,42 @@
 
 void Game::init()
 {
+	system("cls");
 	drawBorders();
 	boards[0].draw();
 	boards[1].draw();
+}
+
+void Game::menu()
+{
+	cout << "WELCOME !" << endl;
+	cout << "enter your choice and press return :" << endl;
+	cout << "(1) Start a new game" << endl;
+	//	(2) Continue a paused game
+	cout <<	"(8) Present instructions and keys" << endl;
+	cout <<	"(9) EXIT" << endl;
+		
+
+	int userInput = 0;
+	cin >> userInput;
+
+	switch (userInput)
+	{
+	case 1: //start the game
+		this->init();
+		this->run();
+		break;
+	case 8: 
+		cout << "888"; 
+		break;
+	case 9: 
+		cout << "GOOD BYE !";
+		break;
+	default: 
+		cout << "no";
+		userInput = 0;
+		break;
+	}
 }
 
 void Game::run()
