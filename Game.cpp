@@ -67,11 +67,11 @@ void Game::run()
 	clear_screen();
 
 	if (!boards[0].isLost() && boards[1].isLost()) {
-		cout << "LeftPlayerWins" << endl;
+		cout << "Left Player Wins" << endl;
 	}
 
 	if (boards[0].isLost() && !boards[1].isLost()) {
-		cout << "RightPlayerWins" << endl;
+		cout << "Right Player Wins" << endl;
 	}
 }
 

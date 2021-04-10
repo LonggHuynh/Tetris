@@ -4,7 +4,7 @@ void Board::draw() {
 	for (int y = 0; y < HEIGHT; y++) {
 		for (int x = 0; x < WIDTH; x++) {
 			char ch = ' ';
-			
+
 			if (field[y][x]) {
 				ch = '#';
 			}
@@ -20,9 +20,9 @@ void Board::draw() {
 void Board::clearRow(int y) {
 	for (int x = 5; x < WIDTH; x++) {
 		Point(boardOffset.getX() + x, boardOffset.getY() + y).draw(' ');
-		Point(boardOffset.getX() + WIDTH -1 - x, boardOffset.getY() + y).draw(' ');
-		Sleep(10);
-	}	
+		Point(boardOffset.getX() + WIDTH - 1 - x, boardOffset.getY() + y).draw(' ');
+		Sleep(CLEAR_ROW_DELAY);
+	}
 }
 
 bool Board::isLost() {
@@ -43,58 +43,85 @@ void Board::shrinkEmptyRow(int rowDeleted) {
 	fill(field[0].begin(), field[0].end(), 0);
 }
 
-void Board::rotateCounterClockwise() {	
+void Board::rotateBlock(int quarters) {
 	block->clearDraw();
-	block->rotateQuarterly(-1);	
-	
-	if (isOutOfBounds())
-		block->rotateQuarterly(1);
+	block->rotateQuarterly(quarters);
+
+	auto deltaX = getRightBorderDeviation();
+	bool isColiding = false;
+
+	if (deltaX > 0) {
+		isColiding = tryMoveBlock(-deltaX, 0, false);		
+	}
+	else {
+		deltaX = getLeftBorderDeviation();
+
+		if (deltaX < 0) {
+			isColiding = tryMoveBlock(-deltaX, 0, false);
+		}
+		else {
+			isColiding = checkBlockFieldColision();
+		}
+	}
+
+	if (isColiding)
+		block->rotateQuarterly(-quarters);
 
 	block->draw();
 }
 
-void Board::rotateClockwise() {	
-	block->clearDraw();
-	block->rotateQuarterly(1);
-	
-	if (isOutOfBounds())
-		block->rotateQuarterly(-1);
+bool Board::tryMoveBlock(int x, int y, bool shouldDraw) {
+	if(shouldDraw)
+		block->clearDraw();
 
-	block->draw();
+	block->move(x, y);
+	bool isOut = isOutOfBounds();
+	// we should check the colision only if the block is in bounds
+	bool isColiding = isOut ? isOutOfMaxY() : checkBlockFieldColision();
+
+	if (isOut || isColiding)
+		block->move(-x, -y);
+
+	if (shouldDraw)
+		block->draw();
+
+	return isColiding;
 }
 
-void Board::moveRight() {	
-	if (isOutOfMaxX())
-		return;
-	block->clearDraw();
-	block->move(1, 0);
-	block->draw();
+void Board::rotateCounterClockwise() {
+	rotateBlock(-1);
+}
+
+void Board::rotateClockwise() {
+	rotateBlock(1);
+}
+
+void Board::moveRight() {
+	tryMoveBlock(1, 0);
 }
 
 void Board::moveLeft() {
-	if (isOutOfMinX())
-		return;
-
-	block->clearDraw();
-	block->move(-1, 0);
-	block->draw();
+	tryMoveBlock(-1, 0);
 }
 
 bool Board::isOutOfBounds() {
-	return isOutOfMinX() || isOutOfMaxX();
+	return getLeftBorderDeviation() < 0 || getRightBorderDeviation() > 0 || isOutOfMaxY();
 }
 
-bool Board::isOutOfMinX() {
+int Board::getLeftBorderDeviation() {
 	int minX = block->getBlockMinX();
 
-	return minX <= boardOffset.getX();		
+	return minX - boardOffset.getX();
 }
 
-bool Board::isOutOfMaxX() {
+int Board::getRightBorderDeviation() {
 	int maxX = block->getBlockMaxX();
 
-	return maxX >= boardOffset.getX() + WIDTH - 1;
-		
+	return maxX - (boardOffset.getX() + WIDTH - 1);
+}
+
+bool Board::isOutOfMaxY() {
+	return block->getBlockMaxY() >= boardOffset.getY() + HEIGHT;
 }
 
 void Board::layBlockInField() {
@@ -109,17 +136,17 @@ void Board::layBlockInField() {
 bool Board::checkBlockFieldColision() {
 	for (int i = 0; i < 4; i++) {
 		Point p = block->getPoint(i);
-		int y = p.getY() - boardOffset.getY() + 1;
+		int y = p.getY() - boardOffset.getY();
 		int x = p.getX() - boardOffset.getX();
-		
+
 		if (y < 0)
 			continue;
 
 		bool isEmpty = !field[y][x];
-		
-		if (!isEmpty) {			
+
+		if (!isEmpty) {
 			return true;
-		}		
+		}
 	}
 
 	return false;
@@ -129,7 +156,7 @@ void Board::generateNewBlock() {
 	if (block)
 		delete block;
 
-	block = new Block(Point(boardOffset.getX() + WIDTH / 2, 0));
+	block = new Block(Point(boardOffset.getX() + WIDTH / 2 - 2, 0));
 }
 
 void Board::checkForCompletedRows(int bottom, int top) {
@@ -149,16 +176,13 @@ void Board::step(bool drop) {
 		return;
 	}
 
-	block->clearDraw();
-	block->move(0, 1);
-	block->draw();
-	bool isColiding = checkBlockFieldColision();
+	bool isColiding = tryMoveBlock(0, 1);
 
 	if (isColiding) {
 		if (checkIfLost()) {
 			return;
 		}
-		layBlockInField();	
+		layBlockInField();
 		int bottom = block->getBlockMinY() - boardOffset.getY();
 		int top = block->getBlockMaxY() - boardOffset.getY();
 		checkForCompletedRows(bottom, top);

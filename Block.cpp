@@ -25,8 +25,6 @@ void Block::pickBlockType(Point offset) {
 	{
 		for (size_t j = 0; j < 4; j++)
 		{
-			/*shape[i][j] = 0;
-			shape[i][j] = block_list[blockType][i][j];*/
 			if (block_list[blockType][i][j] == 1) {
 				points[p++].setPosition(
 					offset.getX() + i,
@@ -35,6 +33,8 @@ void Block::pickBlockType(Point offset) {
 			}
 		}
 	}
+
+	center.setPosition(offset.getX() + 2, offset.getY() + 2);
 }
 
 void Block::drawShape(char ch) {
@@ -55,6 +55,8 @@ void Block::move(int x, int y) {
 	for (int i = 0; i < 4; i++) {
 		points[i].move(x, y);
 	}
+
+	center.move(x, y);
 }
 
 void Block::rotateQuarterly(int clockwise) {
