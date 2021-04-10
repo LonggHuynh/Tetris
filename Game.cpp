@@ -12,7 +12,7 @@ void Game::init()
 void Game::menu()
 {
 	system("cls");
-	if (this->isRunning){ cout << "The game paused" << endl; }
+	if (this->isRunning){ cout << "WELCOME BACK" << endl; }
 	else { cout << "WELCOME !" << endl; }
 
 	cout << "enter your choice and press return :" << endl;
@@ -43,16 +43,27 @@ void Game::menu()
 		}
 		break;
 	case 8: 
-		cout << "Instructions :"; 
+		this->instructions();
 		break;
 	case 9: 
 		cout << "GOOD BYE !";
 		break;
 	default: 
-		cout << "no";
-		userInput = 0;
+		this->menu();
 		break;
 	}
+}
+
+void Game::instructions()
+{
+	system("cls");
+	cout << "MOVING INSTRUCTIONS" << endl;
+	cout << "For PALAY 1 : D - move right , A - move left , S - rotate clockwise , W - rotate counterclockwise , X - drop" << endl;
+	cout << "For PALAY 2 : L - move right , J - move left , K - rotate clockwise , I - rotate counterclockwise , M - drop" << endl;
+	cout << "press any key to continue ..." << endl;
+		
+	char key = _getch();
+	this->menu();
 }
 
 void Game::run()

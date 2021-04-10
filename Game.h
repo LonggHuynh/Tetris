@@ -16,6 +16,7 @@ public:
 	void run();
 	void drawBorders();
 	void menu();
+	void instructions();
 };
 
 #endif
