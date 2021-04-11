@@ -132,10 +132,20 @@ void Game::run()
 
 	if (!boards[0].isLost() && boards[1].isLost()) {
 		cout << "Left Player Wins" << endl;
+		cout << "press any key to continue ..." << endl;
+
+		this->isRunning = false;
+		char key = _getch();
+		this->menu();
 	}
 
 	if (boards[0].isLost() && !boards[1].isLost()) {
 		cout << "Right Player Wins" << endl;
+		cout << "press any key to continue ..." << endl;
+
+		this->isRunning = false;
+		char key = _getch();
+		this->menu();
 	}
 }
 
