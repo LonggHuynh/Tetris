@@ -24,7 +24,3 @@ void Point::setPosition(int _x, int _y) {
 	x = _x;
 	y = _y;
 }
-//void Point::move() {
-//	int dir = rand() % 4;
-//	move(dir);
-//}

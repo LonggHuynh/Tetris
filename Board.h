@@ -10,12 +10,24 @@ using std::endl;
 
 class Board
 {
-	enum { 
-		WIDTH = 12, 
-		HEIGHT = 18, 
-		DROP_SPEED = 5, 
+	enum {
+		WIDTH = 12,
+		HEIGHT = 18,
+		DROP_SPEED = 5,
 		CLEAR_ROW_DELAY = 10
 	};
+	bool hasLost = false;
+	bool checkBlockFieldColision();
+	bool checkIfLost();
+	void layBlockInField();
+	void clearRow(int y);
+	void rotateBlock(int quarters);
+	bool tryMoveBlock(int x, int y, bool shouldDraw = true);
+	void shrinkEmptyRow(int y);
+	void checkForCompletedRows(int bottom, int top);
+	void generateNewBlock();
+protected:
+	Block* block = nullptr;
 	vector<vector<int>> field = {
 		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -37,31 +49,25 @@ class Board
 		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 		{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }
 	};
-	Point boardOffset;	
-	Block* block = nullptr;
-	bool hasLost = false;
-	bool checkBlockFieldColision();
-	bool checkIfLost();
-	void layBlockInField();
-	void clearRow(int y);
-	void rotateBlock(int quarters);
-	bool tryMoveBlock(int x, int y, bool shouldDraw = true);	
-	void shrinkEmptyRow(int y);
-	void checkForCompletedRows(int bottom, int top);
-	void generateNewBlock();
+	Point boardOffset;
 public:
-	Board() : Board(0,0) {}
+	Board() : Board(0, 0) {}
 	Board(int offsetX, int offsetY) {
-		boardOffset = Point(offsetX, offsetY);	
+		boardOffset = Point(offsetX, offsetY);
 		generateNewBlock();
 	}
+	~Board() {
+		if (block)
+			delete block;
+	};
+	virtual void step(bool drop = false);
+	virtual void actOnNextKey(char key) = 0;
 	bool isLost();
 	void draw();
 	void rotateCounterClockwise();
 	void rotateClockwise();
 	void moveRight();
 	void moveLeft();
-	void step(bool drop);
 	bool isOutOfBounds();
 	int getRightBorderDeviation();
 	int getLeftBorderDeviation();

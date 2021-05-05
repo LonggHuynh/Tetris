@@ -3,20 +3,22 @@
 
 #include "io_utils.h"
 #include "Board.h"
+#include "HumanPlayer.h"
+#include "ComputerPlayer.h"
+#include "Menu.h"
 
 using std::cout;
 using std::endl;
 
 class Game {
-	enum { ESC = 27, GAME_SPEED = 30};
-	Board boards[2] = { {1,0}, {14,0} };
+	enum { ESC = 27, GAME_SPEED = 30 };
+	Board* leftBoard = nullptr, * rightBoard = nullptr;
 	bool isRunning = false;
-public:	
+public:
 	void init();
 	void run();
 	void drawBorders();
-	void menu();
-	void instructions();
+	void startMenu();
 };
 
 #endif

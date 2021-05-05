@@ -141,8 +141,11 @@
   <ItemGroup>
     <ClCompile Include="Block.cpp" />
     <ClCompile Include="Board.cpp" />
+    <ClCompile Include="ComputerPlayer.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="HumanPlayer.cpp" />
     <ClCompile Include="io_utils.cpp" />
+    <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="Tetris.cpp" />
   </ItemGroup>
@@ -150,9 +153,12 @@
     <ClInclude Include="Block.h" />
     <ClInclude Include="Board.h" />
     <ClInclude Include="Color.h" />
+    <ClInclude Include="ComputerPlayer.h" />
     <ClInclude Include="config.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="HumanPlayer.h" />
     <ClInclude Include="io_utils.h" />
+    <ClInclude Include="Menu.h" />
     <ClInclude Include="Point.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
