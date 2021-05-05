@@ -6,6 +6,5 @@ using namespace std;
 
 int main() {
 	Game game;
-	game.menu();
-
+	game.startMenu();
 }

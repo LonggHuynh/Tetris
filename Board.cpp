@@ -51,7 +51,7 @@ void Board::rotateBlock(int quarters) {
 	bool isColiding = false;
 
 	if (deltaX > 0) {
-		isColiding = tryMoveBlock(-deltaX, 0, false);		
+		isColiding = tryMoveBlock(-deltaX, 0, false);
 	}
 	else {
 		deltaX = getLeftBorderDeviation();
@@ -71,7 +71,7 @@ void Board::rotateBlock(int quarters) {
 }
 
 bool Board::tryMoveBlock(int x, int y, bool shouldDraw) {
-	if(shouldDraw)
+	if (shouldDraw)
 		block->clearDraw();
 
 	block->move(x, y);
