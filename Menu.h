@@ -9,6 +9,7 @@ using std::endl;
 class Menu {
 public:
 	static void showMenu(const bool isRunning);
+	static int chooseComputerLevel(const char string[]);
 	static void showInstructions();
 	static void declareLeftWinner();
 	static void declareRightWinner();

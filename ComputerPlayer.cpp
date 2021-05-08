@@ -77,16 +77,8 @@ int ComputerPlayer::getWidthAvailableAroundPoint(Point p, int &leftSpaceStart, i
 	return width;
 }
 
-void ComputerPlayer::calcBlockDestination(int minHeight = HEIGHT + 1, int minX = 0, int maxX = WIDTH -1) {
-	Point lowestPoint = getLowestFieldPointFromLevel(minHeight, minX);
-	int leftSpaceStart = lowestPoint.getX();
-	int width = getWidthAvailableAroundPoint(lowestPoint, leftSpaceStart, minX, maxX);
-	
-	int shapeBottomWidth = block->calcWidthAtHeight(block->getBlockMaxY());
-	int shapeTopWidth = block->calcWidthAtHeight(block->getBlockMinY());
-	int shapeLeftHeight = block->calcHeightAtWidth(block->getBlockMinX());
-	int shapeRightHeight = block->calcHeightAtWidth(block->getBlockMaxX());
-
+bool ComputerPlayer::tryMatchSideAndRotate(int width, int shapeBottomWidth, int shapeTopWidth,
+	int shapeLeftHeight, int shapeRightHeight) {
 	bool foundMatch = false;
 	if (width == shapeBottomWidth) {
 		foundMatch = true;
@@ -104,6 +96,22 @@ void ComputerPlayer::calcBlockDestination(int minHeight = HEIGHT + 1, int minX =
 		foundMatch = true;
 		rotateClockwise();
 	}
+
+	return foundMatch;
+}
+
+void ComputerPlayer::calcBlockDestination(int minHeight = HEIGHT + 1, int minX = 0, int maxX = WIDTH -1) {
+	Point lowestPoint = getLowestFieldPointFromLevel(minHeight, minX);
+	int leftSpaceStart = lowestPoint.getX();
+	int width = getWidthAvailableAroundPoint(lowestPoint, leftSpaceStart, minX, maxX);
+	
+	int shapeBottomWidth = block->calcWidthAtHeight(block->getBlockMaxY());
+	int shapeTopWidth = block->calcWidthAtHeight(block->getBlockMinY());
+	int shapeLeftHeight = block->calcHeightAtWidth(block->getBlockMinX());
+	int shapeRightHeight = block->calcHeightAtWidth(block->getBlockMaxX());
+
+	bool foundMatch = tryMatchSideAndRotate(width, shapeBottomWidth, shapeTopWidth,
+		shapeLeftHeight, shapeRightHeight);
 
 	if (!foundMatch) {
 		int maxLength = max(
@@ -128,18 +136,8 @@ void ComputerPlayer::calcBlockDestination(int minHeight = HEIGHT + 1, int minX =
 			}
 		}
 
-		if (width == shapeBottomWidth) {
-		}
-		else if (width == shapeTopWidth) {
-			rotateClockwise();
-			rotateClockwise();
-		}
-		else if (width == shapeLeftHeight) {
-			rotateCounterClockwise();
-		}
-		else if (width == shapeRightHeight) {
-			rotateClockwise();
-		}
+		tryMatchSideAndRotate(width, shapeBottomWidth, shapeTopWidth,
+			shapeLeftHeight, shapeRightHeight);
 	}
 
 	if (leftSpaceStart == 0) {
@@ -175,9 +173,42 @@ void ComputerPlayer::calcBlockDestination(int minHeight = HEIGHT + 1, int minX =
 	blockDestination = new Point(boardOffset.getX() + leftSpaceStart, boardOffset.getY() + lowestPoint.getY());
 }
 
+void ComputerPlayer::makeRandomMistakeByChance(int& delta) {
+	int shouldMakeMistake=0;
+	if(level == 1)
+		shouldMakeMistake = getRandom(1, 10);
+	else if (level == 2)
+		shouldMakeMistake = getRandom(1, 40);
+
+	if (shouldMakeMistake == 1) {
+		int mistakeType = getRandom(1, 5);
+
+		switch (mistakeType) {
+		case 1:
+			delta = -delta;
+			break;
+		case 2:
+			delta = 0;
+			break;
+		case 3:
+			rotateClockwise();
+			break;
+		case 4:
+			rotateClockwise();
+			rotateClockwise();
+			break;
+		case 5:
+			rotateCounterClockwise();
+			break;
+		}
+	}
+}
+
 void ComputerPlayer::moveToDestination() {
 	int bottomMinX = block->getBlockMinXAtBottom();
 	int delta = bottomMinX - blockDestination->getX();
+
+	makeRandomMistakeByChance(delta);
 
 	if (delta == 0)
 		shouldDropBlock = true;

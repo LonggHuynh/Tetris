@@ -8,6 +8,7 @@
 using std::cout;
 using std::endl;
 using std::accumulate;
+using std::rand;
 
 class ComputerPlayer : public Board {
 	int level;
@@ -16,6 +17,9 @@ class ComputerPlayer : public Board {
 	void calcBlockDestination(int minHeight, int minX, int maxX);
 	Point getLowestFieldPointFromLevel(int minHeightint, int minX);
 	virtual void generateNewBlock() override;
+	void makeRandomMistakeByChance(int &delta);
+	bool tryMatchSideAndRotate(int width, int shapeBottomWidth, int shapeTopWidth,
+		int shapeLeftHeight, int shapeRightHeight);
 	int getWidthAvailableAroundPoint(const Point p, int &leftSpaceStart, int minX, int maxX);
 public:
 	ComputerPlayer(int offsetX, int offsetY, int level);

@@ -38,3 +38,19 @@ void Menu::declareRightWinner() {
 	cout << "Right Player Wins" << endl;
 	cout << "press any key to continue ..." << endl;
 }
+
+int Menu::chooseComputerLevel(const char string[] = "") {
+	system("cls");
+	cout << "Choose " << string << " computer level" << endl;
+	cout << "(a) BEST (b) GOOD (c) NOVICE" << endl;
+
+	while (true) {
+		char key = _getch();
+		if (key == 'a')
+			return 3;
+		if (key == 'b')
+			return 2;
+		if (key == 'c')
+			return 1;
+	}
+}
