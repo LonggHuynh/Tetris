@@ -21,9 +21,9 @@ void Block::pickPrimaryBlockRotation() {
 void Block::pickBlockType(Point offset) {
 	int blockType = getRandom(0, 6);
 
-	for (size_t i = 0, p = 0; i < 4; i++)
+	for (size_t i = 0, p = 0; i < numberOfPoints; i++)
 	{
-		for (size_t j = 0; j < 4; j++)
+		for (size_t j = 0; j < numberOfPoints; j++)
 		{
 			if (block_list[blockType][i][j] == 1) {
 				points[p++].setPosition(
@@ -38,7 +38,7 @@ void Block::pickBlockType(Point offset) {
 }
 
 void Block::drawShape(char ch) {
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < numberOfPoints; i++) {
 		points[i].draw(ch);				
 	}
 }
@@ -52,7 +52,7 @@ void Block::clearDraw() {
 }
 
 void Block::move(int x, int y) {
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < numberOfPoints; i++) {
 		points[i].move(x, y);
 	}
 
@@ -60,7 +60,7 @@ void Block::move(int x, int y) {
 }
 
 void Block::rotateQuarterly(int clockwise) {
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < numberOfPoints; i++) {
 		Point& p = points[i];
 		int x = p.getX() - center.getX();
 		int y = p.getY() - center.getY();
@@ -78,7 +78,7 @@ const Point Block::getPoint(int i) {
 int Block::getBlockMaxX() {
 	int maxX = points[0].getX();
 	
-	for (int i = 1; i < 4; i++) {
+	for (int i = 1; i < numberOfPoints; i++) {
 		int x = points[i].getX();
 		
 		if (maxX < x) {
@@ -92,7 +92,7 @@ int Block::getBlockMaxX() {
 int Block::getBlockMinX() {
 	int minX = points[0].getX();
 
-	for (int i = 1; i < 4; i++) {
+	for (int i = 1; i < numberOfPoints; i++) {
 		int x = points[i].getX();
 
 		if (minX > x) {
@@ -106,7 +106,7 @@ int Block::getBlockMinX() {
 int Block::getBlockMaxY() {
 	int maxY = points[0].getY();
 
-	for (int i = 1; i < 4; i++) {
+	for (int i = 1; i < numberOfPoints; i++) {
 		int y = points[i].getY();
 
 		if (maxY < y) {
@@ -120,7 +120,7 @@ int Block::getBlockMaxY() {
 int Block::getBlockMinY() {
 	int minY = points[0].getY();
 
-	for (int i = 1; i < 4; i++) {
+	for (int i = 1; i < numberOfPoints; i++) {
 		int y = points[i].getY();
 
 		if (minY > y) {

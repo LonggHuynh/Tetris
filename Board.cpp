@@ -125,7 +125,7 @@ bool Board::isOutOfMaxY() {
 }
 
 void Board::layBlockInField() {
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < block->numberOfPoints; i++) {
 		Point p = block->getPoint(i);
 		int y = p.getY() - boardOffset.getY();
 		int x = p.getX() - boardOffset.getX();
@@ -155,8 +155,13 @@ bool Board::checkBlockFieldColision() {
 void Board::generateNewBlock() {
 	if (block)
 		delete block;
-
-	block = new Block(Point(boardOffset.getX() + WIDTH / 2 - 2, 0));
+	if (steps % 5 == 0) {
+		block = new Bomb(Point(boardOffset.getX() + WIDTH / 2 - 2, 0));
+	}
+	else {
+		block = new Block(Point(boardOffset.getX() + WIDTH / 2 - 2, 0));
+	}
+	
 }
 
 void Board::checkForCompletedRows(int bottom, int top) {
@@ -180,18 +185,58 @@ void Board::step() {
 	bool isColiding = tryMoveBlock(0, 1);
 
 	if (isColiding) {
-		if (checkIfLost()) {			
+		
+		if (checkIfLost()) {
 			return;
 		}
-		shouldDropBlock = false;
 		layBlockInField();
 		int bottom = block->getBlockMinY() - boardOffset.getY();
 		int top = block->getBlockMaxY() - boardOffset.getY();
-		checkForCompletedRows(bottom, top);
+		if (block->numberOfPoints == 1) {
+			explode(block->getPoint(0));
+		}
+		else {
+			checkForCompletedRows(bottom, top);
+		}
+		
+
+		shouldDropBlock = false;
+		steps++;
 		generateNewBlock();
 	}
 	else if (shouldDropBlock) {
 		Sleep(DROP_SPEED);
 		this->step();
+	}
+}
+
+void Board::explode(Point point) {
+	int x = point.getX() - 4;
+	int y = point.getY() - 4;
+	for (int i = 0; i < 9; i++)
+	{
+		int new_y = y + i;
+		if (new_y >= (boardOffset.getY() + HEIGHT)) 
+		{
+			continue;
+		}
+		//else
+		for (int j = 0; j < 9; j++)
+		{
+			int new_x = x + j;
+			if (new_x < boardOffset.getX() || new_x > boardOffset.getX() + WIDTH - 1)
+			{
+				continue;
+			}
+			//else if field is not empty
+			int offset_x = new_x - boardOffset.getX();
+			int offset_y = new_y - boardOffset.getY();
+			if (field[offset_y][offset_x]) {
+				field[offset_y][offset_x] = 0;
+
+				Point temp = Point(new_x, new_y);
+				temp.draw(' ');
+			}	
+		}
 	}
 }

@@ -57,13 +57,16 @@ class Block {
             { 0, 0, 1, 0 }
         }
     };
-    Point points[4];
-    Point center;
-    void drawShape(char ch);
-    void pickPrimaryBlockRotation();
-    void pickBlockType(Point offset);
-    void setMaxYtoOffset(int y);
+
+protected:
+	Point points[4];
+	virtual void pickPrimaryBlockRotation();
+	virtual void setMaxYtoOffset(int y);
+	virtual void pickBlockType(Point offset);
+	Point center;
 public:
+	int numberOfPoints = 4;
+	virtual void drawShape(char ch);	
     Block() : Block(Point()) {}
 	Block(Point offset) {
         pickBlockType(offset);
@@ -71,7 +74,7 @@ public:
         setMaxYtoOffset(offset.getY());
         draw();
 	}
-	void draw();
+	virtual void draw();
     void clearDraw();
     void rotateQuarterly(int clockwise);
     void move(int _x, int _y);
