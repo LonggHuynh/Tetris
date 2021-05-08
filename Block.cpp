@@ -130,3 +130,69 @@ int Block::getBlockMinY() {
 
 	return minY;
 }
+
+int Block::calcWidthAtHeight(int height) {
+	int width = 0;
+	for (int i = 0; i < 4; i++) {
+		int y = points[i].getY();
+
+		if (height == y) {
+			width++;
+		}
+	}
+
+	return width;
+}
+
+int Block::calcHeightAtWidth(int width) {
+	int height = 0;
+	for (int i = 0; i < 4; i++) {
+		int x = points[i].getX();
+
+		if (width == x) {
+			height++;
+		}
+	}
+
+	return height;
+}
+
+int Block::getBlockMinXAtBottom() {
+	int minX = points[0].getX();
+	int maxY = points[0].getY();
+
+	for (int i = 1; i < 4; i++) {
+		int x = points[i].getX();
+		int y = points[i].getY();
+
+		if (maxY < y) {
+			maxY = y;
+			minX = x;
+		}
+		else if (maxY == y && minX > x) {
+			minX = x;
+		}
+	}
+
+	return minX;
+}
+
+int Block::getBlockMaxXAtBottom() {
+	int maxX = points[0].getX();
+	int maxY = points[0].getY();
+
+	for (int i = 1; i < 4; i++) {
+		int x = points[i].getX();
+		int y = points[i].getY();
+
+		if (maxY < y) {
+			maxY = y;
+			maxX = x;
+		}
+		else if (maxY == y && maxX < x) {
+			maxX = x;
+		}		
+	}
+
+	return maxX;
+}

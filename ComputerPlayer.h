@@ -13,10 +13,10 @@ class ComputerPlayer : public Board {
 	int level;
 	Point* blockDestination = nullptr;
 	void moveToDestination();
-	void calcBlockDestination();
-	Point getLowestFieldPoint();
+	void calcBlockDestination(int minHeight, int minX, int maxX);
+	Point getLowestFieldPointFromLevel(int minHeightint, int minX);
 	virtual void generateNewBlock() override;
-	int getWidthAvailableAroundPoint(const Point p, int &leftSpaceStart);
+	int getWidthAvailableAroundPoint(const Point p, int &leftSpaceStart, int minX, int maxX);
 public:
 	ComputerPlayer(int offsetX, int offsetY, int level);
 	~ComputerPlayer() {
