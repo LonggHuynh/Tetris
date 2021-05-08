@@ -45,8 +45,3 @@ void HumanPlayer::checkRightPlayerKeyHit(char key) {
 		shouldDropBlock = true;
 	}
 }
-
-void HumanPlayer::step(bool drop) {
-	Board::step(shouldDropBlock);
-	shouldDropBlock = false;
-}

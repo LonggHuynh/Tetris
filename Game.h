@@ -14,7 +14,11 @@ class Game {
 	enum { ESC = 27, GAME_SPEED = 30 };
 	Board* leftBoard = nullptr, * rightBoard = nullptr;
 	bool isRunning = false;
+	void cleanPlayers();
 public:
+	~Game() {
+		cleanPlayers();
+	};
 	void init();
 	void run();
 	void drawBorders();

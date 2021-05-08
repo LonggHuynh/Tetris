@@ -10,12 +10,6 @@ using std::endl;
 
 class Board
 {
-	enum {
-		WIDTH = 12,
-		HEIGHT = 18,
-		DROP_SPEED = 5,
-		CLEAR_ROW_DELAY = 10
-	};
 	bool hasLost = false;
 	bool checkBlockFieldColision();
 	bool checkIfLost();
@@ -25,8 +19,8 @@ class Board
 	bool tryMoveBlock(int x, int y, bool shouldDraw = true);
 	void shrinkEmptyRow(int y);
 	void checkForCompletedRows(int bottom, int top);
-	void generateNewBlock();
 protected:
+	virtual void generateNewBlock();
 	Block* block = nullptr;
 	vector<vector<int>> field = {
 		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -50,6 +44,13 @@ protected:
 		{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }
 	};
 	Point boardOffset;
+	bool shouldDropBlock = false;
+	enum {
+		WIDTH = 12,
+		HEIGHT = 18,
+		DROP_SPEED = 5,
+		CLEAR_ROW_DELAY = 10
+	};
 public:
 	Board() : Board(0, 0) {}
 	Board(int offsetX, int offsetY) {
@@ -60,7 +61,7 @@ public:
 		if (block)
 			delete block;
 	};
-	virtual void step(bool drop = false);
+	virtual void step();
 	virtual void actOnNextKey(char key) = 0;
 	bool isLost();
 	void draw();
