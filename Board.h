@@ -3,6 +3,7 @@
 #include <vector>
 #include "Point.h"
 #include "Block.h"
+#include "Bomb.h"
 
 using std::vector;
 using std::cout;
@@ -19,9 +20,11 @@ class Board
 	bool tryMoveBlock(int x, int y, bool shouldDraw = true);
 	void shrinkEmptyRow(int y);
 	void checkForCompletedRows(int bottom, int top);
+	int steps = 1;
 protected:
 	virtual void generateNewBlock();
 	Block* block = nullptr;
+	Bomb* bomb = nullptr;
 	vector<vector<int>> field = {
 		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -58,7 +61,9 @@ public:
 		generateNewBlock();
 	}
 	~Board() {
-		if (block)
+		if (bomb)
+			delete bomb;
+		else if (block)
 			delete block;
 	};
 	virtual void step();
