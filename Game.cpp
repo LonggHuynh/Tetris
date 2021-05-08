@@ -7,8 +7,16 @@ void Game::init()
 	drawBorders();
 }
 
+void Game::cleanPlayers() {
+	if (leftBoard) 
+		delete leftBoard;
+	if(rightBoard)
+		delete rightBoard;
+}
+
 void Game::startMenu()
 {
+	cleanPlayers();
 	Menu::showMenu(isRunning);
 
 	int userInput = 0;
@@ -60,6 +68,8 @@ void Game::run()
 	int stepsCounter = 0;
 
 	do {
+		key = 0;
+
 		if (_kbhit())
 		{
 			key = _getch();
@@ -68,10 +78,10 @@ void Game::run()
 				this->startMenu();
 				return;
 			}
-
-			leftBoard->actOnNextKey(key);
-			rightBoard->actOnNextKey(key);
 		}
+		
+		leftBoard->actOnNextKey(key);
+		rightBoard->actOnNextKey(key);
 
 		if (!stepsCounter) {
 			leftBoard->step();

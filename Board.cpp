@@ -171,25 +171,27 @@ void Board::checkForCompletedRows(int bottom, int top) {
 	}
 }
 
-void Board::step(bool drop) {
+void Board::step() {
 	if (hasLost) {
+		shouldDropBlock = false;
 		return;
 	}
 
 	bool isColiding = tryMoveBlock(0, 1);
 
 	if (isColiding) {
-		if (checkIfLost()) {
+		if (checkIfLost()) {			
 			return;
 		}
+		shouldDropBlock = false;
 		layBlockInField();
 		int bottom = block->getBlockMinY() - boardOffset.getY();
 		int top = block->getBlockMaxY() - boardOffset.getY();
 		checkForCompletedRows(bottom, top);
 		generateNewBlock();
 	}
-	else if (drop) {
+	else if (shouldDropBlock) {
 		Sleep(DROP_SPEED);
-		this->step(drop);
+		this->step();
 	}
 }
