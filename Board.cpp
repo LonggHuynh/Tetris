@@ -153,10 +153,15 @@ bool Board::checkBlockFieldColision() {
 }
 
 void Board::generateNewBlock() {
-	if (block)
+	if (bomb) {
+		delete bomb;
+		bomb = nullptr;
+	}
+	else if (block)
 		delete block;
-	if (steps % 5 == 0) {
-		block = new Bomb(Point(boardOffset.getX() + WIDTH / 2 - 2, 0));
+	if (steps % 20 == 0) {
+		bomb = new Bomb(Point(boardOffset.getX() + WIDTH / 2 - 2, 0));
+		block = bomb;
 	}
 	else {
 		block = new Block(Point(boardOffset.getX() + WIDTH / 2 - 2, 0));
@@ -192,8 +197,8 @@ void Board::step() {
 		layBlockInField();
 		int bottom = block->getBlockMinY() - boardOffset.getY();
 		int top = block->getBlockMaxY() - boardOffset.getY();
-		if (block->numberOfPoints == 1) {
-			explode(block->getPoint(0));
+		if (bomb) {
+			bomb->explode(&field, boardOffset.getX(), boardOffset.getY(), HEIGHT, WIDTH);
 		}
 		else {
 			checkForCompletedRows(bottom, top);
@@ -210,33 +215,3 @@ void Board::step() {
 	}
 }
 
-void Board::explode(Point point) {
-	int x = point.getX() - 4;
-	int y = point.getY() - 4;
-	for (int i = 0; i < 9; i++)
-	{
-		int new_y = y + i;
-		if (new_y >= (boardOffset.getY() + HEIGHT)) 
-		{
-			continue;
-		}
-		//else
-		for (int j = 0; j < 9; j++)
-		{
-			int new_x = x + j;
-			if (new_x < boardOffset.getX() || new_x > boardOffset.getX() + WIDTH - 1)
-			{
-				continue;
-			}
-			//else if field is not empty
-			int offset_x = new_x - boardOffset.getX();
-			int offset_y = new_y - boardOffset.getY();
-			if (field[offset_y][offset_x]) {
-				field[offset_y][offset_x] = 0;
-
-				Point temp = Point(new_x, new_y);
-				temp.draw(' ');
-			}	
-		}
-	}
-}

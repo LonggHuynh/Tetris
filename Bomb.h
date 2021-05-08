@@ -4,9 +4,6 @@
 #include "io_utils.h"
 #include "Block.h"
 #include <vector>
-#include <cmath>
-
-//using std::vector;
 
 class Bomb : public Block {
 	void pickBlockType(Point offset);
@@ -17,11 +14,11 @@ public:
 	Bomb(Point offset) {
 		numberOfPoints = 1;
 		pickBlockType(offset);
-		//pickPrimaryBlockRotation();
 		setMaxYtoOffset(offset.getY());
 		draw();
 	}
 	void draw();
+	void explode(vector<vector<int>>* fields, int offsetX, int offsetY, int height, int width);
 };
 
 #endif
