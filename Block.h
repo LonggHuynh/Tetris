@@ -80,6 +80,10 @@ public:
     int getBlockMinX();
     int getBlockMaxY();
     int getBlockMinY();
+    int calcWidthAtHeight(int height);
+    int calcHeightAtWidth(int width);
+    int getBlockMinXAtBottom();
+    int getBlockMaxXAtBottom();
 };
 
 #endif

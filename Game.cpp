@@ -20,25 +20,30 @@ void Game::startMenu()
 	Menu::showMenu(isRunning);
 
 	int userInput = 0;
+	int leftLevel;
+	int rightLevel;
 	cin >> userInput;
 
 	switch (userInput)
 	{
-	case 1: //start the game
+	case 1: //start the game hjuman vs human
 		this->leftBoard = new HumanPlayer({ 1, 0, true });
 		this->rightBoard = new HumanPlayer({ 14, 0, false });
 		this->init();
 		this->run();
 		break;
-	case 2: //start the game
+	case 2: //start the game human vs computer
+		rightLevel = Menu::chooseComputerLevel("");
 		this->leftBoard = new HumanPlayer({ 1, 0, true });
-		this->rightBoard = new ComputerPlayer({ 14, 0, 1 });
+		this->rightBoard = new ComputerPlayer({ 14, 0, rightLevel });
 		this->init();
 		this->run();
 		break;
-	case 3: //start the game
-		this->leftBoard = new ComputerPlayer({ 1, 0, 1 });
-		this->rightBoard = new ComputerPlayer({ 14, 0, 1 });
+	case 3: //start the game 2 computers
+		leftLevel = Menu::chooseComputerLevel("left");
+		rightLevel = Menu::chooseComputerLevel("right");
+		this->leftBoard = new ComputerPlayer({ 1, 0, leftLevel });
+		this->rightBoard = new ComputerPlayer({ 14, 0, rightLevel });
 		this->init();
 		this->run();
 		break;
