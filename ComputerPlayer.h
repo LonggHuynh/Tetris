@@ -15,12 +15,12 @@ class ComputerPlayer : public Board {
 	Point* blockDestination = nullptr;
 	void moveToDestination();
 	void calcBlockDestination(int minHeight, int minX, int maxX);
-	Point getLowestFieldPointFromLevel(int minHeightint, int minX);
+	Point getLowestFieldPointFromLevel(int minHeightint, int minX) const;
 	virtual void generateNewBlock() override;
 	void makeRandomMistakeByChance(int &delta);
 	bool tryMatchSideAndRotate(int width, int shapeBottomWidth, int shapeTopWidth,
 		int shapeLeftHeight, int shapeRightHeight);
-	int getWidthAvailableAroundPoint(const Point p, int &leftSpaceStart, int minX, int maxX);
+	int getWidthAvailableAroundPoint(const Point p, int &leftSpaceStart, int minX, int maxX) const;
 public:
 	ComputerPlayer(int offsetX, int offsetY, int level);
 	~ComputerPlayer() {

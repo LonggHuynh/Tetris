@@ -1,6 +1,7 @@
 #ifndef _BOARD_H_
 #define _BOARD_H_
 #include <vector>
+#include "io_utils.h"
 #include "Point.h"
 #include "Block.h"
 #include "Bomb.h"
@@ -20,11 +21,9 @@ class Board
 	bool tryMoveBlock(int x, int y, bool shouldDraw = true);
 	void shrinkEmptyRow(int y);
 	void checkForCompletedRows(int bottom, int top);
-	int steps = 1;
 protected:
 	virtual void generateNewBlock();
 	Block* block = nullptr;
-	Bomb* bomb = nullptr;
 	vector<vector<int>> field = {
 		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -61,23 +60,21 @@ public:
 		generateNewBlock();
 	}
 	~Board() {
-		if (bomb)
-			delete bomb;
-		else if (block)
+		if (block)
 			delete block;
 	};
 	virtual void step();
 	virtual void actOnNextKey(char key) = 0;
-	bool isLost();
-	void draw();
+	bool isLost() const;
+	void draw() const;
 	void rotateCounterClockwise();
 	void rotateClockwise();
 	void moveRight();
 	void moveLeft();
-	bool isOutOfBounds();
-	int getRightBorderDeviation();
-	int getLeftBorderDeviation();
-	bool isOutOfMaxY();
+	bool isOutOfBounds() const;
+	int getRightBorderDeviation() const;
+	int getLeftBorderDeviation() const;
+	bool isOutOfMaxY() const;
 };
 
 #endif

@@ -21,6 +21,8 @@ void Block::pickPrimaryBlockRotation() {
 void Block::pickBlockType(Point offset) {
 	int blockType = getRandom(0, 6);
 
+	allowRotation = blockType != CUBE_SHAPE_INDEX;
+
 	for (size_t i = 0, p = 0; i < numberOfPoints; i++)
 	{
 		for (size_t j = 0; j < numberOfPoints; j++)
@@ -37,13 +39,13 @@ void Block::pickBlockType(Point offset) {
 	center.setPosition(offset.getX() + 2, offset.getY() + 2);
 }
 
-void Block::drawShape(char ch) {
+void Block::drawShape(char ch) const {
 	for (int i = 0; i < numberOfPoints; i++) {
 		points[i].draw(ch);				
 	}
 }
 
-void Block::draw() {
+void Block::draw() const {
 	drawShape('#');
 }
 
@@ -60,6 +62,10 @@ void Block::move(int x, int y) {
 }
 
 void Block::rotateQuarterly(int clockwise) {
+	if (!allowRotation) {
+		return;
+	}
+	 
 	for (int i = 0; i < numberOfPoints; i++) {
 		Point& p = points[i];
 		int x = p.getX() - center.getX();
@@ -70,12 +76,16 @@ void Block::rotateQuarterly(int clockwise) {
 	}
 }
 
-const Point Block::getPoint(int i) {
+int Block::getNumberOfPoints() const{
+	return numberOfPoints;
+}
+
+const Point Block::getPoint(int i) const {
 	if(i >= 0 && i <= 3)
 		return points[i];
 }
 
-int Block::getBlockMaxX() {
+int Block::getBlockMaxX() const {
 	int maxX = points[0].getX();
 	
 	for (int i = 1; i < numberOfPoints; i++) {
@@ -89,7 +99,7 @@ int Block::getBlockMaxX() {
 	return maxX;
 }
 
-int Block::getBlockMinX() {
+int Block::getBlockMinX() const {
 	int minX = points[0].getX();
 
 	for (int i = 1; i < numberOfPoints; i++) {
@@ -103,7 +113,7 @@ int Block::getBlockMinX() {
 	return minX;
 }
 
-int Block::getBlockMaxY() {
+int Block::getBlockMaxY() const {
 	int maxY = points[0].getY();
 
 	for (int i = 1; i < numberOfPoints; i++) {
@@ -117,7 +127,7 @@ int Block::getBlockMaxY() {
 	return maxY;
 }
 
-int Block::getBlockMinY() {
+int Block::getBlockMinY() const {
 	int minY = points[0].getY();
 
 	for (int i = 1; i < numberOfPoints; i++) {
@@ -131,7 +141,7 @@ int Block::getBlockMinY() {
 	return minY;
 }
 
-int Block::calcWidthAtHeight(int height) {
+int Block::calcWidthAtHeight(int height) const {
 	int width = 0;
 	for (int i = 0; i < 4; i++) {
 		int y = points[i].getY();
@@ -144,7 +154,7 @@ int Block::calcWidthAtHeight(int height) {
 	return width;
 }
 
-int Block::calcHeightAtWidth(int width) {
+int Block::calcHeightAtWidth(int width) const {
 	int height = 0;
 	for (int i = 0; i < 4; i++) {
 		int x = points[i].getX();
@@ -157,7 +167,7 @@ int Block::calcHeightAtWidth(int width) {
 	return height;
 }
 
-int Block::getBlockMinXAtBottom() {
+int Block::getBlockMinXAtBottom() const {
 	int minX = points[0].getX();
 	int maxY = points[0].getY();
 
@@ -177,7 +187,7 @@ int Block::getBlockMinXAtBottom() {
 	return minX;
 }
 
-int Block::getBlockMaxXAtBottom() {
+int Block::getBlockMaxXAtBottom() const {
 	int maxX = points[0].getX();
 	int maxY = points[0].getY();
 
