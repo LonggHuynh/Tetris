@@ -1,6 +1,6 @@
 #include "Board.h"
 
-void Board::draw() {
+void Board::draw() const {
 	for (int y = 0; y < HEIGHT; y++) {
 		for (int x = 0; x < WIDTH; x++) {
 			char ch = ' ';
@@ -25,7 +25,7 @@ void Board::clearRow(int y) {
 	}
 }
 
-bool Board::isLost() {
+bool Board::isLost() const {
 	return hasLost;
 }
 
@@ -104,28 +104,30 @@ void Board::moveLeft() {
 	tryMoveBlock(-1, 0);
 }
 
-bool Board::isOutOfBounds() {
+bool Board::isOutOfBounds() const {
 	return getLeftBorderDeviation() < 0 || getRightBorderDeviation() > 0 || isOutOfMaxY();
 }
 
-int Board::getLeftBorderDeviation() {
+int Board::getLeftBorderDeviation() const {
 	int minX = block->getBlockMinX();
 
 	return minX - boardOffset.getX();
 }
 
-int Board::getRightBorderDeviation() {
+int Board::getRightBorderDeviation() const {
 	int maxX = block->getBlockMaxX();
 
 	return maxX - (boardOffset.getX() + WIDTH - 1);
 }
 
-bool Board::isOutOfMaxY() {
+bool Board::isOutOfMaxY() const {
 	return block->getBlockMaxY() >= boardOffset.getY() + HEIGHT;
 }
 
 void Board::layBlockInField() {
-	for (int i = 0; i < block->numberOfPoints; i++) {
+	auto numPoints = block->getNumberOfPoints();
+
+	for (int i = 0; i < numPoints; i++) {
 		Point p = block->getPoint(i);
 		int y = p.getY() - boardOffset.getY();
 		int x = p.getX() - boardOffset.getX();
@@ -153,20 +155,19 @@ bool Board::checkBlockFieldColision() {
 }
 
 void Board::generateNewBlock() {
-	if (bomb) {
-		delete bomb;
-		bomb = nullptr;
-	}
-	else if (block)
+	if (block)
 		delete block;
-	if (steps % 20 == 0) {
-		bomb = new Bomb(Point(boardOffset.getX() + WIDTH / 2 - 2, 0));
-		block = bomb;
+
+	auto chance = getRandom(1, 20);
+	bool shouldGenerateBomb = (chance == 10); //draw 1 specific number out of 20 is at 5% chance
+
+	if (shouldGenerateBomb) {
+		block = new Bomb(Point(boardOffset.getX() + WIDTH / 2 - 2, 0));		
 	}
 	else {
 		block = new Block(Point(boardOffset.getX() + WIDTH / 2 - 2, 0));
 	}
-	
+
 }
 
 void Board::checkForCompletedRows(int bottom, int top) {
@@ -190,23 +191,23 @@ void Board::step() {
 	bool isColiding = tryMoveBlock(0, 1);
 
 	if (isColiding) {
-		
+
 		if (checkIfLost()) {
 			return;
 		}
 		layBlockInField();
 		int bottom = block->getBlockMinY() - boardOffset.getY();
 		int top = block->getBlockMaxY() - boardOffset.getY();
+		auto bomb = dynamic_cast<Bomb*>(block);
+
 		if (bomb) {
-			bomb->explode(&field, boardOffset.getX(), boardOffset.getY(), HEIGHT, WIDTH);
+			bomb->explode(&field, boardOffset.getX(), boardOffset.getY(), HEIGHT-1, WIDTH-1);
 		}
 		else {
 			checkForCompletedRows(bottom, top);
 		}
-		
 
 		shouldDropBlock = false;
-		steps++;
 		generateNewBlock();
 	}
 	else if (shouldDropBlock) {
@@ -214,4 +215,3 @@ void Board::step() {
 		this->step();
 	}
 }
-

@@ -6,18 +6,19 @@
 #include <vector>
 
 class Bomb : public Block {
-	void pickBlockType(Point offset);
+	void pickBlockType(Point offset) override;
 public:
 	Bomb() : Block(Point()) {
 		numberOfPoints = 1;
 	}
 	Bomb(Point offset) {
 		numberOfPoints = 1;
+		allowRotation = false;
 		pickBlockType(offset);
 		setMaxYtoOffset(offset.getY());
 		draw();
 	}
-	void draw();
+	void draw() const override;
 	void explode(vector<vector<int>>* fields, int offsetX, int offsetY, int height, int width);
 };
 

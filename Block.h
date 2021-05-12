@@ -12,8 +12,15 @@ using std::endl;
 using std::rand;
 
 class Block {	
+    enum { CUBE_SHAPE_INDEX=0 };
     const vector<vector<vector<int>>> block_list =
     {
+        {
+            { 0, 0, 0, 0 },
+            { 0, 1, 1, 0 },
+            { 0, 1, 1, 0 },
+            { 0, 0, 0, 0 }
+        },
         {
             { 0, 0, 1, 0 },
             { 0, 0, 1, 0 },
@@ -43,13 +50,7 @@ class Block {
             { 0, 0, 1, 0 },
             { 0, 1, 1, 1 },
             { 0, 0, 0, 0 }
-        },
-        {
-            { 0, 0, 0, 0 },
-            { 0, 1, 1, 0 },
-            { 0, 1, 1, 0 },
-            { 0, 0, 0, 0 }
-        },
+        },        
         {
             { 0, 0, 0, 0 },
             { 0, 1, 1, 0 },
@@ -60,13 +61,13 @@ class Block {
 
 protected:
 	Point points[4];
-	virtual void pickPrimaryBlockRotation();
-	virtual void setMaxYtoOffset(int y);
 	virtual void pickBlockType(Point offset);
+	void setMaxYtoOffset(int y);
+	void pickPrimaryBlockRotation();
 	Point center;
-public:
+    bool allowRotation = true;
 	int numberOfPoints = 4;
-	virtual void drawShape(char ch);	
+public:
     Block() : Block(Point()) {}
 	Block(Point offset) {
         pickBlockType(offset);
@@ -74,19 +75,21 @@ public:
         setMaxYtoOffset(offset.getY());
         draw();
 	}
-	virtual void draw();
+	virtual void drawShape(char ch) const;	
+	virtual void draw() const;
     void clearDraw();
     void rotateQuarterly(int clockwise);
     void move(int _x, int _y);
-    const Point getPoint(int i);
-    int getBlockMaxX();
-    int getBlockMinX();
-    int getBlockMaxY();
-    int getBlockMinY();
-    int calcWidthAtHeight(int height);
-    int calcHeightAtWidth(int width);
-    int getBlockMinXAtBottom();
-    int getBlockMaxXAtBottom();
+    const Point getPoint(int i) const;
+    int getNumberOfPoints() const;
+    int getBlockMaxX() const;
+    int getBlockMinX() const;
+    int getBlockMaxY() const;
+    int getBlockMinY() const;
+    int calcWidthAtHeight(int height) const;
+    int calcHeightAtWidth(int width) const;
+    int getBlockMinXAtBottom() const;
+    int getBlockMaxXAtBottom() const;
 };
 
 #endif

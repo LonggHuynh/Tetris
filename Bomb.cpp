@@ -5,15 +5,14 @@ void Bomb::pickBlockType(Point offset) {
 	center.setPosition(offset.getX(), offset.getY());
 }
 
-
-void Bomb::draw() {
+void Bomb::draw() const {
 	drawShape('@');
 }
 
 void Bomb::explode(vector<vector<int>>* field, int offsetX, int offsetY, int height, int width)
 {
-	int x = this->center.getX() - 4;
-	int y = this->center.getY() - 4;
+	int x = max(this->center.getX() - 4,0);
+	int y = max(this->center.getY() - 4,0);
 	for (int i = 0; i < 9; i++)
 	{
 		int new_y = y + i;
@@ -25,7 +24,7 @@ void Bomb::explode(vector<vector<int>>* field, int offsetX, int offsetY, int hei
 		for (int j = 0; j < 9; j++)
 		{
 			int new_x = x + j;
-			if (new_x < offsetX || new_x > offsetX + width - 1)
+			if (new_x < offsetX || new_x > offsetX + width)
 			{
 				continue;
 			}

@@ -1,17 +1,17 @@
 #include "Point.h"
 
-void Point::draw(char ch) {
+void Point::draw(char ch) const {
 	if (y >= 0) {
 		gotoxy(x, y);
 		cout << ch << endl;
 	}
 }
 
-int Point::getX() {
+int Point::getX() const {
 	return x;
 }
 
-int Point::getY() {
+int Point::getY() const {
 	return y;
 }
 

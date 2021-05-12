@@ -11,10 +11,9 @@ class Point {
 public:
 	Point() {}
 	Point(int _x, int _y) : x(_x), y(_y) {}	
-	void draw(char ch);
-	void draw();
-	int getX();
-	int getY();
+	void draw(char ch) const;
+	int getX() const;
+	int getY() const;
 	void setPosition(int _x, int _y);
 	void move(int _x, int _y);	
 };

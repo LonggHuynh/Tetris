@@ -13,7 +13,7 @@ void ComputerPlayer::generateNewBlock() {
 	}
 }
 
-Point ComputerPlayer::getLowestFieldPointFromLevel(int minHeightAllowed, int minX) {
+Point ComputerPlayer::getLowestFieldPointFromLevel(int minHeightAllowed, int minX) const {
 	int maxEmptySpace = 0; 
 	int columnNumber = 0;
 	for (int x = minX; x < WIDTH; x++) {
@@ -35,7 +35,7 @@ Point ComputerPlayer::getLowestFieldPointFromLevel(int minHeightAllowed, int min
 	return Point(columnNumber, maxEmptySpace);
 }
 
-int ComputerPlayer::getWidthAvailableAroundPoint(Point p, int &leftSpaceStart, int minX, int maxX) {
+int ComputerPlayer::getWidthAvailableAroundPoint(Point p, int &leftSpaceStart, int minX, int maxX) const {
 	vector<int> row = field[p.getY()];
 	int width = 0;
 
