@@ -16,15 +16,19 @@ void ComputerPlayer::generateNewBlock() {
 Point ComputerPlayer::getLowestFieldPointFromLevel(int minHeightAllowed, int minX) const {
 	int maxEmptySpace = 0; 
 	int columnNumber = 0;
-	for (int x = minX; x < WIDTH; x++) {
+	for (int x = 0; x < WIDTH; x++) {
 		int columnEmptySpace;
 		
 		for (columnEmptySpace = 0;
-			field[columnEmptySpace][x] == 0 && columnEmptySpace <= minHeightAllowed; 
+			field[columnEmptySpace][x] == 0; 
 			columnEmptySpace++) {
 		}
 
 		columnEmptySpace--;
+
+		if (columnEmptySpace > minHeightAllowed || columnEmptySpace == minHeightAllowed && minX >= x) {
+			continue;
+		}
 
 		if (columnEmptySpace > maxEmptySpace) {
 			maxEmptySpace = columnEmptySpace;
@@ -36,7 +40,7 @@ Point ComputerPlayer::getLowestFieldPointFromLevel(int minHeightAllowed, int min
 }
 
 int ComputerPlayer::getWidthAvailableAroundPoint(Point p, int &leftSpaceStart, int minX, int maxX) const {
-	vector<int> row = field[p.getY()];
+	const vector<int>& row = (field[p.getY()]);
 	int width = 0;
 
 	for (int left = p.getX(); left >= minX; left--) {
