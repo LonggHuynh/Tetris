@@ -59,8 +59,7 @@ public:
 		boardOffset = Point(offsetX, offsetY);
 		generateNewBlock();
 	}
-	~Board() {
-		if (block)
+	virtual ~Board() {
 			delete block;
 	};
 	virtual void step();

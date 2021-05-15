@@ -5,18 +5,21 @@ void Game::init()
 	this->isRunning = true;
 	system("cls");
 	drawBorders();
+	if (leftBoard && rightBoard) {
+		leftBoard->draw();
+		rightBoard->draw();
+	}
 }
 
 void Game::cleanPlayers() {
-	if (leftBoard) 
-		delete leftBoard;
-	if(rightBoard)
-		delete rightBoard;
+	delete leftBoard;
+	delete rightBoard;
+	leftBoard = nullptr;
+	rightBoard = nullptr;
 }
 
 void Game::startMenu()
 {
-	cleanPlayers();
 	Menu::showMenu(isRunning);
 
 	int userInput = 0;
@@ -27,12 +30,14 @@ void Game::startMenu()
 	switch (userInput)
 	{
 	case 1: //start the game hjuman vs human
+		cleanPlayers();
 		this->leftBoard = new HumanPlayer({ 1, 0, true });
 		this->rightBoard = new HumanPlayer({ 14, 0, false });
 		this->init();
 		this->run();
 		break;
 	case 2: //start the game human vs computer
+		cleanPlayers();
 		rightLevel = Menu::chooseComputerLevel("");
 		this->leftBoard = new HumanPlayer({ 1, 0, true });
 		this->rightBoard = new ComputerPlayer({ 14, 0, rightLevel });
@@ -40,6 +45,7 @@ void Game::startMenu()
 		this->run();
 		break;
 	case 3: //start the game 2 computers
+		cleanPlayers();
 		leftLevel = Menu::chooseComputerLevel("left");
 		rightLevel = Menu::chooseComputerLevel("right");
 		this->leftBoard = new ComputerPlayer({ 1, 0, leftLevel });
@@ -59,6 +65,7 @@ void Game::startMenu()
 		break;
 	}
 	case 9:
+		cleanPlayers();
 		cout << "GOOD BYE !";
 		break;
 	default:

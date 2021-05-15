@@ -155,8 +155,10 @@ bool Board::checkBlockFieldColision() {
 }
 
 void Board::generateNewBlock() {
-	if (block)
+	if (block) {
 		delete block;
+		block = nullptr;
+	}
 
 	auto chance = getRandom(1, 20);
 	bool shouldGenerateBomb = (chance == 10); //draw 1 specific number out of 20 is at 5% chance
@@ -201,7 +203,7 @@ void Board::step() {
 		auto bomb = dynamic_cast<Bomb*>(block);
 
 		if (bomb) {
-			bomb->explode(&field, boardOffset.getX(), boardOffset.getY(), HEIGHT-1, WIDTH-1);
+			bomb->explode(&field, boardOffset.getX(), boardOffset.getY(), HEIGHT, WIDTH-1);
 		}
 		else {
 			checkForCompletedRows(bottom, top);

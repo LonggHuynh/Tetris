@@ -23,8 +23,7 @@ class ComputerPlayer : public Board {
 	int getWidthAvailableAroundPoint(const Point p, int &leftSpaceStart, int minX, int maxX) const;
 public:
 	ComputerPlayer(int offsetX, int offsetY, int level);
-	~ComputerPlayer() {
-		if (blockDestination)
+	virtual ~ComputerPlayer() override {
 			delete blockDestination;
 	}
 	virtual void step();
