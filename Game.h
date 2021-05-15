@@ -11,7 +11,7 @@ using std::cout;
 using std::endl;
 
 class Game {
-	enum { ESC = 27, GAME_SPEED = 10 };
+	enum { ESC = 27, GAME_SPEED = 30 };
 	Board* leftBoard = nullptr, * rightBoard = nullptr;
 	bool isRunning = false;
 	void cleanPlayers();
