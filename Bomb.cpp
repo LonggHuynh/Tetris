@@ -9,32 +9,40 @@ void Bomb::draw() const {
 	drawShape('@');
 }
 
-void Bomb::explode(vector<vector<int>>* field, int offsetX, int offsetY, int height, int width)
+int Bomb::getDiameter() const {
+	return 2 * BOMB_RADIUS;
+}
+
+void Bomb::explode(vector<vector<int>>& field, Point offset, Point &startIndex, int height, int width)
 {
-	int x = max(this->center.getX() - 4,0);
-	int y = max(this->center.getY() - 4,0);
-	for (int i = 0; i < 9; i++)
+	int offsetY = offset.getY();
+	int offsetX = offset.getX();
+	int explosionStartX = max(this->center.getX() - BOMB_RADIUS, offsetX);
+	int explosionStartY = max(this->center.getY() - BOMB_RADIUS, offsetY);
+	startIndex.setPosition(explosionStartX - offsetX, explosionStartY - offsetY);
+
+	for (int i = 0; i <= 2 * BOMB_RADIUS; i++)
 	{
-		int new_y = y + i;
-		if (new_y >= (offsetY + height))
+		int bombedY = explosionStartY + i;
+		if (bombedY >= (offsetY + height))
 		{
 			continue;
 		}
 		//else
-		for (int j = 0; j < 9; j++)
+		for (int j = 0; j <= 2 * BOMB_RADIUS; j++)
 		{
-			int new_x = x + j;
-			if (new_x < offsetX || new_x > offsetX + width)
+			int bombedX = explosionStartX + j;
+			if (bombedX < offsetX || bombedX > offsetX + width)
 			{
 				continue;
 			}
 			//else if field is not empty
-			int offset_x = new_x - offsetX;
-			int offset_y = new_y - offsetY;
-			if ((*field)[offset_y][offset_x]) {
-				(*field)[offset_y][offset_x] = 0;
+			int clear_x = bombedX - offsetX;
+			int clear_y = bombedY - offsetY;
+			if (field[clear_y][clear_x]) {
+				field[clear_y][clear_x] = 0;
 
-				Point temp = Point(new_x, new_y);
+				Point temp = Point(bombedX, bombedY);
 				temp.draw(' ');
 			}
 		}

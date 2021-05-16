@@ -6,6 +6,7 @@
 #include <vector>
 
 class Bomb : public Block {
+	enum {BOMB_RADIUS = 4};
 	void pickBlockType(Point offset) override;
 public:
 	Bomb() : Block(Point()) {
@@ -18,8 +19,9 @@ public:
 		setMaxYtoOffset(offset.getY());
 		draw();
 	}
+	int getDiameter() const;
 	void draw() const override;
-	void explode(vector<vector<int>>* fields, int offsetX, int offsetY, int height, int width);
+	void explode(vector<vector<int>>& fields, Point offset, Point& startIndex, int height, int width);
 };
 
 #endif

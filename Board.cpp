@@ -164,7 +164,7 @@ void Board::generateNewBlock() {
 	bool shouldGenerateBomb = (chance == 10); //draw 1 specific number out of 20 is at 5% chance
 
 	if (shouldGenerateBomb) {
-		block = new Bomb(Point(boardOffset.getX() + WIDTH / 2 - 2, 0));		
+		block = new Bomb(Point(boardOffset.getX() + WIDTH / 2 - 2, 0));
 	}
 	else {
 		block = new Block(Point(boardOffset.getX() + WIDTH / 2 - 2, 0));
@@ -203,7 +203,12 @@ void Board::step() {
 		auto bomb = dynamic_cast<Bomb*>(block);
 
 		if (bomb) {
-			bomb->explode(&field, boardOffset.getX(), boardOffset.getY(), HEIGHT, WIDTH-1);
+			Point explotionStartIndex;
+			int diameter = bomb->getDiameter();
+			bomb->explode(field, boardOffset, explotionStartIndex, HEIGHT, WIDTH - 1);
+			delete bomb;
+			block = nullptr;
+			reduceExplosion(explotionStartIndex, diameter);
 		}
 		else {
 			checkForCompletedRows(bottom, top);
@@ -215,5 +220,23 @@ void Board::step() {
 	else if (shouldDropBlock) {
 		Sleep(DROP_SPEED);
 		this->step();
+	}
+}
+
+void Board::reduceExplosion(Point startIndex, int diameter) {
+	int maxX = min(startIndex.getX() + diameter, WIDTH - 1);
+
+	for (int i = 0; i < HEIGHT - startIndex.getY(); i++) {
+		for (int y = i + startIndex.getY() - 1; y >= 0; y--) {
+			for (int x = startIndex.getX(); x <= maxX; x++) {
+				if (y < HEIGHT && field[y+1][x] == 0) {					
+					field[y+1][x] = field[y][x];
+					field[y][x] = 0;
+				}
+			}
+		}
+
+		draw();
+		Sleep(DROP_SPEED);
 	}
 }
