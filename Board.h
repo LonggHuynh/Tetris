@@ -74,6 +74,7 @@ public:
 	int getRightBorderDeviation() const;
 	int getLeftBorderDeviation() const;
 	bool isOutOfMaxY() const;
+	void reduceExplosion(Point start, int diameter);
 };
 
 #endif

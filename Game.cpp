@@ -65,7 +65,6 @@ void Game::startMenu()
 		break;
 	}
 	case 9:
-		cleanPlayers();
 		cout << "GOOD BYE !";
 		break;
 	default:
