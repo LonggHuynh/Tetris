@@ -1,8 +1,5 @@
 # Tetris
-This is a C++ implementation of the classic game Tetris.
-
-## Getting Started
-To get started with this project, clone the repository and build the project using your preferred C++ compiler.
+This is a C++ implementation of the classic game Tetris allowing 2 players competing with each other. The game also has a bomb feature, where an explosion can clear adjacent cells within radius.
 
 ### Requirements
 ```
