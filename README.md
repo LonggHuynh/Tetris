@@ -5,9 +5,10 @@ This is a C++ implementation of the classic game Tetris.
 To get started with this project, clone the repository and build the project using your preferred C++ compiler.
 
 ### Requirements
+```
 Windows
 C++ (11 or later)
-
+```
 ### Running the Game
 
 To run the Tetris game on a Windows computer, follow these steps:
